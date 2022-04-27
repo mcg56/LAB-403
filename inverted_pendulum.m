@@ -3,7 +3,7 @@ clear, close all, clc;
 %% Define system parameters
 %Constants
 m_p = 0.215;    %(kg)       Pendulum mass
-m_c = 1.608;    %(kg)       Cart maxx
+m_c = 1.608;    %(kg)       Cart mass
 L   = 0.314;    %(m)        Effective pendulum half-length
 I_o = 7.06e-3;  %(kg.m^2)   Pendulum moment of inertia about centre of mass
 R   = 0.16;     %(ohm)      Motor terminal resistance
@@ -25,4 +25,24 @@ A = [0,   0,    1,    0;
      0,   A4_2, A4_3, 0];
  
 B3 = -(I_o + m_p*L^2)*k_m*k_g/(((m_c + m_p)*I_o + m_c*m_p*L^2)*R*r);
-B4 = 
+B4 = m_p*L*k_m*k_g/(((m_c + m_p)*I_o + m_c*m_p*L^2)*R*r);
+
+B = [0;0;B3;B4];
+
+C = eye(4);
+D = 0;
+
+%% Make state space object
+sys = ss(A, B, C, D);
+
+%check stability
+eig(sys)
+
+%% Design control gains
+
+
+
+
+%% Responses
+% figure
+% impulse(sys);
