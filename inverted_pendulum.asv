@@ -12,7 +12,7 @@ k_g = 3.71;     %(m/m)      Gearing ratio
 k_m = 0.0168;   %(V.s/rad)  Motor back EMF constant
 c   = 0;        %(N.s/m)    Damping on cart
 g   = 9.81;     %(m/s^2)    Acceleration due to gravity
-dx  = 0.1;      %(m)        Step size of cart.
+dx  = 0.1;      %(m)        Step size of cart
 
 %Matricies
 A3_2 = (-m_p^2*L^2*g)/((m_c + m_p)*I_o + m_c*m_p*L^2);
@@ -40,20 +40,24 @@ sys = ss(A, B, C, D);
 eig(sys);
 
 %% Design control gains
-%Place poles method
-%poles = [-1+5i, -1-5i, -1, -2];
-poles = [-3 -4 -5 -6];
+poles = [-1+5i, -1-5i, -1, -2];
+
 K = place(A, B, poles);
+
 ACL = A - B*K;
+
 sys = ss(ACL, B, C, D);
 
-%tracking gain N
 C1 = [1 0 0 0];
-N = -inv(C1*inv(ACL)*B); 
+
+N = -inv(C1*inv(ACL)*B)
+
+
+
 
 %% Responses
 
-sys.B = dx*N*sys.B; %As it is tracking a dx step input, also include tracking gain N
+sys.B = 0.1*N*sys.B; %As it is tracking a 0.1m step input
 
 
 figure
